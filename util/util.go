@@ -17,6 +17,11 @@ func IsForbiddenPath(input string) bool {
 	return match
 }
 
+func GetWorkingDir() string {
+	rootDir, _ := os.Getwd()
+	return rootDir
+}
+
 func FileExists(absPath string) bool {
 	_, err := os.Stat(absPath)
 	return os.IsExist(err)

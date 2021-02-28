@@ -10,13 +10,19 @@ import (
 
 func main() {
 
-	rootDir := flag.String("d", ".", "Hosted directory (Default: '.' )")
+	var DEFAULT_DIR string = "."
+
+	var rootDir string
+	flag.StringVar(&rootDir, "Hosted directory", DEFAULT_DIR, " (Default: '.' )")
 	flag.Parse()
-	fmt.Println("We go host some stuff at " + *rootDir)
+	if rootDir == DEFAULT_DIR {
+		rootDir = util.GetWorkingDir()
+	}
+	fmt.Println("We go host some stuff at " + rootDir)
 	initialize(rootDir)
 }
 
-func initialize(rootDir *string) {
+func initialize(rootDir string) {
 	router := gin.Default()
 	router.NoRoute(func(c *gin.Context) {
 		relativePath := c.Request.URL.Path
@@ -26,7 +32,7 @@ func initialize(rootDir *string) {
 			c.JSON(403, "Requested forbidden filesystem path")
 			return
 		}
-		absPath := path.Join(*rootDir, relativePath)
+		absPath := path.Join(rootDir, relativePath)
 		if util.FileExists(absPath) {
 			c.JSON(404, "File not found: "+relativePath)
 		}
