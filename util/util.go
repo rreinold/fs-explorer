@@ -22,9 +22,10 @@ func GetWorkingDir() string {
 	return rootDir
 }
 
+// Reference for methodology: https://golangr.com/file-exists/
 func FileExists(absPath string) bool {
 	_, err := os.Stat(absPath)
-	return os.IsExist(err)
+	return err == nil
 }
 
 func IsDir(absPath string) (bool, error) {
