@@ -27,7 +27,25 @@ func initialize(rootDir *string) {
 			return
 		}
 		absPath := path.Join(*rootDir, relativePath)
-		c.JSON(200, "About to get that for you at "+absPath)
+		if util.FileExists(absPath) {
+			c.JSON(404, "File not found: "+relativePath)
+		}
+		isDir, dirError := util.IsDir(absPath)
+		if dirError != nil {
+			c.JSON(500, "Unable to access file")
+		}
+		if isDir {
+			c.JSON(200, "About to get that whole dir at "+absPath)
+			return
+		} else {
+			contents, readErr := util.GetFileContents(absPath)
+			if readErr != nil {
+				c.JSON(500, "Unable to read file")
+				return
+			}
+			c.JSON(200, contents)
+		}
+
 	})
 	router.Run(":3000")
 }
