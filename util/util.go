@@ -5,7 +5,7 @@ import (
 )
 
 func IsForbiddenPath(input string) bool {
-	REGEXP := `\.\.`
+	REGEXP := `(\.\.|~)`
 	match, err := regexp.Match(REGEXP, []byte(input))
 	if err != nil {
 		return true
