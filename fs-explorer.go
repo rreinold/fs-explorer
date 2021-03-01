@@ -11,17 +11,6 @@ import (
 var DefaultDir string = "."
 var rootDir string
 
-// Based upon https://www.npmjs.com/package/directory-tree
-type File struct {
-	Name        string `json:"name"`
-	Owner       string `json:"owner"`
-	Size        int    `json:"size"`
-	Permissions string `json:"permissions"`
-	IsDir       bool   `json:"isDir"`
-	Children    []File `json:"children"`
-	Path        string `json:"path"`
-}
-
 func main() {
 
 	flag.StringVar(&rootDir, "d", DefaultDir, "Directory to host (Default: '.' )")
@@ -40,14 +29,14 @@ func initialize(rootDir string) {
 }
 
 func processRequest(c *gin.Context) {
-	relativePath := c.Request.URL.Path
-	fmt.Println("Request received, fetching from ", rootDir, " with relative path ", relativePath)
+	relPath := c.Request.URL.Path
+	fmt.Println("Request received, fetching from ", rootDir, " with relative path ", relPath)
 	// TODO URL Decode
-	if util.IsForbiddenPath(relativePath) {
+	if util.IsForbiddenPath(relPath) {
 		c.JSON(403, "Requested forbidden filesystem path")
 		return
 	}
-	absPath := path.Join(rootDir, relativePath)
+	absPath := path.Join(rootDir, relPath)
 	fmt.Println("Looking for file: ", absPath)
 	if !util.FileExists(absPath) {
 		c.JSON(404, "File not found: "+absPath)
@@ -63,7 +52,7 @@ func processRequest(c *gin.Context) {
 		c.JSON(200, "About to get that whole dir at "+absPath)
 		return
 	} else {
-		contents, readErr := util.GetFileContents(absPath)
+		contents, readErr := util.GetFileContents(absPath, relPath)
 		if readErr != nil {
 			c.JSON(500, "Unable to read file")
 			return

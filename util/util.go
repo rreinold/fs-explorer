@@ -6,6 +6,19 @@ import (
 	"regexp"
 )
 
+// Based upon https://www.npmjs.com/package/directory-tree
+type File struct {
+	Name        string `json:"name"`
+	Owner       string `json:"owner"`
+	Size        int64  `json:"size"`
+	Permissions string `json:"permissions"`
+	IsDir       bool   `json:"isDir"`
+	Children    []File `json:"children"`
+	Path        string `json:"path"`
+	Contents    string `json:"contents"`
+	URI         string `json:"URI"`
+}
+
 func IsForbiddenPath(input string) bool {
 	// Forbid '..' which could move out of hosted dir
 	// Forbid '~' to prevent referencing user home dir
@@ -36,10 +49,22 @@ func IsDir(absPath string) (bool, error) {
 	return fileInfo.IsDir(), err
 }
 
-func GetFileContents(absPath string) (string, error) {
-	contents, err := ioutil.ReadFile(absPath)
-	if err != nil {
-		return "", err
+func GetFileContents(absPath string, relPath string) (File, error) {
+	osFileInfo, osErr := os.Stat(absPath)
+	if osErr != nil {
+		return File{}, osErr
 	}
-	return string(contents), err
+	contents, readErr := ioutil.ReadFile(absPath)
+	if readErr != nil {
+		return File{}, readErr
+	}
+	file := File{
+		Name:        osFileInfo.Name(),
+		Size:        osFileInfo.Size(),
+		Permissions: osFileInfo.Mode().Perm().String(),
+		IsDir:       osFileInfo.IsDir(),
+		Contents:    string(contents),
+		Path:        relPath,
+		URI:         relPath}
+	return file, nil
 }
