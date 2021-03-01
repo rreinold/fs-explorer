@@ -25,13 +25,12 @@ func main() {
 func initialize(rootDir string) {
 	router := gin.Default()
 	router.NoRoute(processRequest)
-	router.Run(":3000")
+	router.Run()
 }
 
 func processRequest(c *gin.Context) {
 	relPath := c.Request.URL.Path
 	fmt.Println("Request received, fetching from ", rootDir, " with relative path ", relPath)
-	// TODO URL Decode
 	if util.IsForbiddenPath(relPath) {
 		c.JSON(403, "Requested forbidden filesystem path")
 		return
@@ -39,7 +38,7 @@ func processRequest(c *gin.Context) {
 	absPath := path.Join(rootDir, relPath)
 	fmt.Println("Looking for file: ", absPath)
 	if !util.FileExists(absPath) {
-		c.JSON(404, "File not found: "+absPath)
+		c.JSON(404, "File not found: "+relPath)
 		return
 
 	}
