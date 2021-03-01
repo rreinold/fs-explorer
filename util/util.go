@@ -4,12 +4,13 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"syscall"
 )
 
 // Based upon https://www.npmjs.com/package/directory-tree
 type File struct {
 	Name        string `json:"name"`
-	Owner       string `json:"owner"`
+	Owner       int    `json:"owner"`
 	Size        int64  `json:"size"`
 	Permissions string `json:"permissions"`
 	IsDir       bool   `json:"isDir"`
@@ -58,13 +59,16 @@ func GetFileContents(absPath string, relPath string) (File, error) {
 	if readErr != nil {
 		return File{}, readErr
 	}
+	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	file := File{
 		Name:        osFileInfo.Name(),
 		Size:        osFileInfo.Size(),
 		Permissions: osFileInfo.Mode().Perm().String(),
 		IsDir:       osFileInfo.IsDir(),
 		Contents:    string(contents),
+		Owner:       owner,
 		Path:        relPath,
+		Children:    []File{},
 		URI:         relPath}
 	return file, nil
 }
