@@ -28,7 +28,6 @@ type FilePreview struct {
 	Type  string `json:"type"`
 }
 
-//
 func GetWorkingDir() string {
 	rootDir, _ := os.Getwd()
 	return rootDir
@@ -41,7 +40,7 @@ func FileExists(absPath string) bool {
 	return err == nil
 }
 
-// Checks if file is directory
+// Checks if file is a directory
 func IsDir(absPath string) (bool, error) {
 	fileInfo, err := os.Stat(absPath)
 	if err != nil {
@@ -50,7 +49,7 @@ func IsDir(absPath string) (bool, error) {
 	return fileInfo.IsDir(), err
 }
 
-// Get all file details for non-directory
+// Get all details for regular file (non-directory)
 func GetFileDetails(absPath string, relPath string) (FileDetails, error) {
 	osFileInfo, osErr := os.Stat(absPath)
 	if osErr != nil {
@@ -99,7 +98,6 @@ func GetDir(absPath string, relPath string) (FileDetails, error) {
 		return FileDetails{}, osErr
 	}
 
-	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	filePreviews := []FilePreview{}
 	files, err := ioutil.ReadDir(absPath)
 	if err != nil {
@@ -118,6 +116,7 @@ func GetDir(absPath string, relPath string) (FileDetails, error) {
 		filePreviews = append(filePreviews, filePreview)
 	}
 
+	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	file := FileDetails{
 		Name:        osFileInfo.Name(),
 		Size:        osFileInfo.Size(),

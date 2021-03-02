@@ -2,16 +2,16 @@
 
 ## Overview
 
-List and view contents of files and directories over REST API.
+List and view contents of regular files and directories over REST API.
 
-### Support
-Supported OSs:
+### Supported
+OSs:
 - Linux
 - OS X
 
 Tested On:
-- Mac OS X 10.15.5
 - Alpine Linux 3.13.2
+- Mac OS X 10.15.5
 
 ### Approach
 
@@ -19,7 +19,7 @@ Make use of Golang's native libraries, `io` and `os` to access the filesystem. T
 
 ## Usage
 
-Runs on default gin port: 8080
+Runs on default port: 8080
 
 ```
 Usage of fs-explorer:
@@ -79,22 +79,23 @@ Docker images are bundled with and host a test directory: `foo`
 
 ### Unit Tests
 
-Unit tests are available, and are run with:
+Unit tests are available for deterministic utility functions in util/utils.go, and are run with:
 
 ```
 go test ./...
 ```
 
+
 ### System Tests
 
-This is an outstanding item, which should rely on a testing harness that support REST calls.
+This is an outstanding item, which should rely on a testing harness can create files on disk and then check JSON responses.
 
 ## Roadmap
 
-- For v1.0.0, prepend basepath of 'v1' for backwards compatibility
-- Add concurrency on os.Stat calls for fetching multiple file details
-- Add System Tests
-
+1. For v1.0.0, prepend basepath of 'v1' for backwards compatibility
+2. Add concurrency on os.Stat calls for fetching multiple file details
+3. Add System Tests
+4. Add other HTTP Method: POST, PUT, DELETE
 
 ## Credit
 
