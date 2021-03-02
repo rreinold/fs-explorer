@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	. "path/filepath"
 	"syscall"
 )
@@ -95,32 +94,21 @@ func GetDir(absPath string, relPath string) (FileDetails, error) {
 	// TODO try catch
 	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	filePreviews := []FilePreview{}
-	err := Walk(absPath, func(childPath string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		fmt.Println("abs: " + absPath)
-		fmt.Println("rel: " + relPath)
-		if !info.IsDir() {
-			absFilePath, filepathErr := filepath.Rel(absPath, childPath)
-			if filepathErr != nil {
-				fmt.Println("Unable to fetch child filepath: ", filepathErr.Error())
-				return filepathErr
-			}
-			// TODO Resolve rel name
-			filePreview, previewErr := getFilePreview(childPath, absFilePath)
-			if previewErr != nil {
-				fmt.Println("Unable to fetch file preview: ", previewErr.Error())
-				return previewErr
-			}
-			filePreviews = append(filePreviews, filePreview)
-		}
-		return nil
-	})
-
+	files, err := ioutil.ReadDir(absPath)
 	if err != nil {
-		fmt.Printf("Failed to walk through files in directory:", absPath, err.Error())
+		fmt.Println("Unable to access directory")
 		return FileDetails{}, err
+	}
+
+	for _, f := range files {
+		rel := Join(relPath, f.Name())
+		abs := Join(absPath, f.Name())
+		filePreview, previewErr := getFilePreview(abs, rel)
+		if previewErr != nil {
+			fmt.Println("Unable to fetch file preview: ", previewErr.Error())
+			return FileDetails{}, previewErr
+		}
+		filePreviews = append(filePreviews, filePreview)
 	}
 	file := FileDetails{
 		Name:        osFileInfo.Name(),
