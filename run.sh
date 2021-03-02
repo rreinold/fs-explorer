@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Build, dockerize, and run fs-explorer
+# Build, dockerize, and run fs-explorer
 
 GOOS=linux go build fs-explorer.go
 docker build -t fs-explorer:dev .
