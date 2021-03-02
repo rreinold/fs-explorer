@@ -5,7 +5,7 @@
 List and view contents of regular files and directories over REST API.
 
 ### Supported
-OSs:
+POSIX-Compliant OSs:
 - Linux
 - OS X
 
