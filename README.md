@@ -15,7 +15,7 @@ Tested On:
 
 ### Approach
 
-Golang's native libraries, `io` and `os` were used in placed of a system call to run `ls` command in order to preclude any arbitrary code injections at the command line. Responses follow an [existing npm approach]([directory-tree npm package](https://www.npmjs.com/package/directory-tree)) for representing filesystems in JSON.
+Make use of Golang's native libraries, `io` and `os` to access the filesystem. This was selected in place of a system call to run `ls` command in order to preclude any arbitrary code injections at the command line. Responses follow an [existing npm approach](https://www.npmjs.com/package/directory-tree) for representing filesystems in JSON.
 
 ## Usage
 
