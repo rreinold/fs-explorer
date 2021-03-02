@@ -16,7 +16,7 @@ var rootDir string
 
 func main() {
 
-	flag.StringVar(&rootDir, "d", DefaultDir, "Directory to host (Default: '.' )")
+	flag.StringVar(&rootDir, "d", DefaultDir, "Path to directory to host")
 	flag.Parse()
 	if rootDir == DefaultDir {
 		rootDir = GetWorkingDir()
