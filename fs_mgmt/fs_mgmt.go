@@ -13,17 +13,17 @@ type FileDetails struct {
 	Size        int64         `json:"size"`
 	Permissions string        `json:"permissions"`
 	IsDir       bool          `json:"isDir"`
-	Children    []FilePreview `json:"children"`
+	Children    []FilePreview `json:"links"`
 	Path        string        `json:"path"`
 	Contents    string        `json:"contents"`
-	URI         string        `json:"URI"`
 }
 
 type FilePreview struct {
 	Name  string `json:"name"`
 	IsDir bool   `json:"isDir"`
 	Path  string `json:"path"`
-	URI   string `json:"URI"`
+	Href  string `json:"href"`
+	Type  string `json:"type"`
 }
 
 func GetWorkingDir() string {

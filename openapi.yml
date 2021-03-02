@@ -1,0 +1,88 @@
+swagger: "2.0"
+info:
+  description: "List and view contents of files and directories over REST API."
+  version: "0.1.0"
+  title: "fs-explorer"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost"
+basePath: "/v1"
+tags:
+- name: "files"
+  description: "Fetch files from a hosted directory"
+schemes:
+- "http"
+paths:
+  /:
+    get:
+      tags:
+        - "files"
+      summary: "Fetches a file, regular or directory"
+      description: "Fetch details for a single file, including links to files listed in a directory"
+      operationId: "/"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/FileDetails"
+        "400":
+          description: "Invalid status value"
+
+definitions:
+  FileDetails:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the file"
+      owner:
+        type: "integer"
+        format: "int"
+        description: "The uid of the owner"
+      size:
+        type: "integer"
+        format: "int64"
+        description: "Size of file, bytes"
+      permissions:
+        type: "string"
+        description: "The mode string, aka permissions, for the file"
+      isDir:
+        type: "boolean"
+        default: false
+        description: "Whether or not it is a directory or regular file"
+      links:
+        type: "array"
+        items:
+          $ref: "#/definitions/FilePreview"
+      path:
+        type: "string"
+        description: "Filepath from root directory"
+      contents:
+        type: "string"
+        description: "The file contents read from disk"
+
+
+
+  FilePreview:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the file"
+      isDir:
+        type: "boolean"
+        default: false
+        description: "Whether or not it is a directory or regular file"
+      path:
+        type: "string"
+        description: "Filepath from root directory"
+      href:
+        type: "string"
+        description: "relative link to resource"
+      type:
+        type: "string"
+        description: "HTTP Method"
+        
