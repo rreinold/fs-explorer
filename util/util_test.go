@@ -13,3 +13,13 @@ func TestFailIsForbiddenPath(t *testing.T) {
 		}
 	}
 }
+
+func TestSuccessIsForbiddenPath(t *testing.T) {
+	input := [...]string{"foo", "foo/bar", "/", "foo/bar1"}
+	for _, value := range input {
+		out := IsForbiddenPath(value)
+		if out {
+			t.Errorf("Incorrectly forbidden clean path: %v", value)
+		}
+	}
+}
