@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "List and view contents of files and directories over REST API."
-  version: "0.1.0"
+  version: "0.2.0"
   title: "fs-explorer"
   license:
     name: "Apache 2.0"
