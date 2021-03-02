@@ -11,6 +11,7 @@ import (
 )
 
 var DefaultDir string = "."
+var SupportedMethod = "GET"
 var rootDir string
 
 func main() {
@@ -20,17 +21,24 @@ func main() {
 	if rootDir == DefaultDir {
 		rootDir = GetWorkingDir()
 	}
-	fmt.Println("We go host some stuff at " + rootDir)
+	fmt.Println("We host at: " + rootDir)
 	initialize(rootDir)
 }
 
+// Start up web server, configure route(s)
 func initialize(rootDir string) {
 	router := gin.Default()
 	router.NoRoute(processRequest)
 	router.Run()
 }
 
+// Handle all HTTP requests
 func processRequest(c *gin.Context) {
+
+	if c.Request.Method != SupportedMethod {
+		c.JSON(501, "Received an unsupported method")
+		return
+	}
 
 	relPath := c.Request.URL.Path
 	fmt.Println("Request received, fetching from ", rootDir, " with relative path ", relPath)
@@ -60,12 +68,12 @@ func processRequest(c *gin.Context) {
 		c.JSON(200, dir)
 		return
 	} else {
-		contents, readErr := GetFileDetails(absPath, relPath)
+		fileDetails, readErr := GetFileDetails(absPath, relPath)
 		if readErr != nil {
 			c.JSON(500, "Unable to access file")
 			return
 		}
-		c.JSON(200, contents)
+		c.JSON(200, fileDetails)
 	}
 
 }

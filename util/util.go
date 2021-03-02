@@ -4,6 +4,7 @@ import (
 	"regexp"
 )
 
+// Prevent forbidden filepaths by restricting particular path shortcuts
 func IsForbiddenPath(input string) bool {
 	// Forbid '..' which could move out of hosted dir
 	// Forbid '~' to prevent referencing user home dir

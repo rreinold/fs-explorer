@@ -72,6 +72,7 @@ func GetFileDetails(absPath string, relPath string) (FileDetails, error) {
 }
 
 func getFilePreview(absPath string, relPath string) (FilePreview, error) {
+	DefaultType := "GET"
 	osFileInfo, osErr := os.Stat(absPath)
 	if osErr != nil {
 		return FilePreview{}, osErr
@@ -82,10 +83,11 @@ func getFilePreview(absPath string, relPath string) (FilePreview, error) {
 		IsDir: osFileInfo.IsDir(),
 		Path:  relPath,
 		Href:  relPath,
-		Type:  "GET"}
+		Type:  DefaultType}
 	return file, nil
 }
 
+// Get a Directory's FileDetails, and children's FilePreviews
 func GetDir(absPath string, relPath string) (FileDetails, error) {
 	osFileInfo, osErr := os.Stat(absPath)
 	if osErr != nil {
@@ -110,6 +112,7 @@ func GetDir(absPath string, relPath string) (FileDetails, error) {
 		}
 		filePreviews = append(filePreviews, filePreview)
 	}
+
 	file := FileDetails{
 		Name:        osFileInfo.Name(),
 		Size:        osFileInfo.Size(),
@@ -119,5 +122,6 @@ func GetDir(absPath string, relPath string) (FileDetails, error) {
 		Path:        relPath,
 		Children:    filePreviews,
 	}
+
 	return file, nil
 }
