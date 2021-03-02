@@ -11,7 +11,7 @@ OSs:
 
 Tested On:
 - Alpine Linux 3.13.2
-- Mac OS X 10.15.5
+- OS X 10.15.5
 
 ### Approach
 
@@ -27,12 +27,7 @@ Usage of fs-explorer:
     	Directory to host (Default: "." )
 ```
 
-### 1. Run script
-
-```
-$ ./run.sh
-```
- ### 2.Run in Docker, from Docker Hub (Recommended)
+ ### 1. Run in Docker, from Docker Hub (Recommended)
 
 ```
 docker run -p 8080:8080 rreinold/fs-explorer:0.2.0
@@ -48,6 +43,11 @@ go run fs-explorer.go -d foo
 GOOS=linux go build fs-explorer.go
 docker build -t fs-explorer:dev .
 docker run -p 8080:8080 fs-explorer:dev
+```
+
+### 4. From script
+```
+./run.sh
 ```
 
 ## API
@@ -75,6 +75,8 @@ $ curl -s localhost:8080/bar
 ```
 ## Testing
 
+### Hosted files
+
 Docker images are bundled with and host a test directory: `foo`
 
 ### Unit Tests
@@ -85,17 +87,16 @@ Unit tests are available for deterministic utility functions in util/utils.go, a
 go test ./...
 ```
 
-
 ### System Tests
 
-This is an outstanding item, which should rely on a testing harness can create files on disk and then check JSON responses.
+This is an outstanding item for the non-deterministic code, which should rely on a testing harness can create files on disk and then check JSON responses via REST API.
 
 ## Roadmap
 
 1. For v1.0.0, prepend basepath of 'v1' for backwards compatibility
 2. Add concurrency on os.Stat calls for fetching multiple file details
 3. Add System Tests
-4. Add other HTTP Method: POST, PUT, DELETE
+4. Add support for other HTTP Methods: POST, PUT, DELETE
 
 ## Credit
 
