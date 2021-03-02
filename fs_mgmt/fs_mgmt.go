@@ -28,17 +28,20 @@ type FilePreview struct {
 	Type  string `json:"type"`
 }
 
+//
 func GetWorkingDir() string {
 	rootDir, _ := os.Getwd()
 	return rootDir
 }
 
+// Check if file exists on FS
 // Reference for approach: https://golangr.com/file-exists/
 func FileExists(absPath string) bool {
 	_, err := os.Stat(absPath)
 	return err == nil
 }
 
+// Checks if file is directory
 func IsDir(absPath string) (bool, error) {
 	fileInfo, err := os.Stat(absPath)
 	if err != nil {
@@ -47,6 +50,7 @@ func IsDir(absPath string) (bool, error) {
 	return fileInfo.IsDir(), err
 }
 
+// Get all file details for non-directory
 func GetFileDetails(absPath string, relPath string) (FileDetails, error) {
 	osFileInfo, osErr := os.Stat(absPath)
 	if osErr != nil {
@@ -56,7 +60,7 @@ func GetFileDetails(absPath string, relPath string) (FileDetails, error) {
 	if readErr != nil {
 		return FileDetails{}, readErr
 	}
-	// TODO try catch
+
 	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	file := FileDetails{
 		Name:        osFileInfo.Name(),
@@ -71,6 +75,7 @@ func GetFileDetails(absPath string, relPath string) (FileDetails, error) {
 	return file, nil
 }
 
+// Get file preview for all children of a requested directory
 func getFilePreview(absPath string, relPath string) (FilePreview, error) {
 	DefaultType := "GET"
 	osFileInfo, osErr := os.Stat(absPath)
@@ -93,7 +98,7 @@ func GetDir(absPath string, relPath string) (FileDetails, error) {
 	if osErr != nil {
 		return FileDetails{}, osErr
 	}
-	// TODO try catch
+
 	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	filePreviews := []FilePreview{}
 	files, err := ioutil.ReadDir(absPath)
