@@ -5,7 +5,7 @@ import (
 )
 
 func TestFailIsForbiddenPath(t *testing.T) {
-	input := [...]string{"..", "~"}
+	input := [...]string{"..", "~", "./../", "~/.ssh/id_rsa", "~/..", "/bar/.."}
 	for _, value := range input {
 		out := IsForbiddenPath(value)
 		if !out {
