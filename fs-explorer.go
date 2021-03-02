@@ -53,10 +53,14 @@ func processRequest(c *gin.Context) {
 		return
 	}
 	if isDir {
-		c.JSON(200, "About to get that whole dir at "+absPath)
+		dir, dirErr := GetDir(absPath, relPath)
+		if dirErr != nil {
+			c.JSON(500, "Unable to access dir")
+		}
+		c.JSON(200, dir)
 		return
 	} else {
-		contents, readErr := GetFileContents(absPath, relPath)
+		contents, readErr := GetFileDetails(absPath, relPath)
 		if readErr != nil {
 			c.JSON(500, "Unable to access file")
 			return
