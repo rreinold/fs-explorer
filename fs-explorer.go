@@ -31,6 +31,7 @@ func initialize(rootDir string) {
 }
 
 func processRequest(c *gin.Context) {
+
 	relPath := c.Request.URL.Path
 	fmt.Println("Request received, fetching from ", rootDir, " with relative path ", relPath)
 
@@ -57,7 +58,7 @@ func processRequest(c *gin.Context) {
 	} else {
 		contents, readErr := GetFileContents(absPath, relPath)
 		if readErr != nil {
-			c.JSON(500, "Unable to read file")
+			c.JSON(500, "Unable to access file")
 			return
 		}
 		c.JSON(200, contents)

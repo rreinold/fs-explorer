@@ -25,11 +25,16 @@ paths:
       - "application/json"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successfully fetched file"
           schema:
             $ref: "#/definitions/FileDetails"
-        "400":
-          description: "Invalid status value"
+        "403":
+          description: "Requested forbidden filesystem path"
+        "404":
+          description: "File not found"
+        "500":
+          description: "Unable to access file"
+          
 
 definitions:
   FileDetails:
@@ -64,11 +69,15 @@ definitions:
         type: "string"
         description: "The file contents read from disk"
 
-
-
   FilePreview:
     type: "object"
     properties:
+      href:
+        type: "string"
+        description: "relative link to resource"
+      type:
+        type: "string"
+        description: "HTTP Method"
       name:
         type: "string"
         description: "The name of the file"
@@ -79,10 +88,4 @@ definitions:
       path:
         type: "string"
         description: "Filepath from root directory"
-      href:
-        type: "string"
-        description: "relative link to resource"
-      type:
-        type: "string"
-        description: "HTTP Method"
         

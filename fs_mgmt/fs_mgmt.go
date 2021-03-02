@@ -54,6 +54,7 @@ func GetFileContents(absPath string, relPath string) (FileDetails, error) {
 	if readErr != nil {
 		return FileDetails{}, readErr
 	}
+	// TODO try catch
 	owner := int(osFileInfo.Sys().(*syscall.Stat_t).Uid)
 	file := FileDetails{
 		Name:        osFileInfo.Name(),
@@ -64,6 +65,6 @@ func GetFileContents(absPath string, relPath string) (FileDetails, error) {
 		Owner:       owner,
 		Path:        relPath,
 		Children:    []FilePreview{},
-		URI:         relPath}
+	}
 	return file, nil
 }
