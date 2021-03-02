@@ -40,7 +40,7 @@ docker run -p 8080:8080 rreinold/fs-explorer:0.1.0
 
 ### 2. Run on Bare Metal
 ```
-go run fs-explorer.go -d public
+go run fs-explorer.go -d foo
 ```
 
 ### 3. Run in Docker, from image
@@ -57,37 +57,25 @@ docker run -p 8080:8080 fs-explorer:dev
 ### Example
 
 ```
-$ curl localhost:8080/website | underscore print
+$ curl -s localhost:8080/bar
 
 {
-  "name": "website",
+  "name": "bar",
   "owner": 503,
   "size": 128,
   "permissions": "-rwxr-xr-x",
   "isDir": true,
   "links": [
-    {
-      "name": "WeaveGrid.html",
-      "isDir": false,
-      "path": "/website/WeaveGrid.html",
-      "href": "/website/WeaveGrid.html",
-      "type": "GET"
-    },
-    {
-      "name": "WeaveGrid_files",
-      "isDir": true,
-      "path": "/website/WeaveGrid_files",
-      "href": "/website/WeaveGrid_files",
-      "type": "GET"
-    }
+    { "name": "bar1", "isDir": false, "path": "/bar/bar1", "href": "/bar/bar1", "type": "GET" },
+    { "name": "baz", "isDir": true, "path": "/bar/baz", "href": "/bar/baz", "type": "GET" }
   ],
-  "path": "/website",
+  "path": "/bar",
   "contents": ""
 }
 ```
 ## Testing
 
-Docker images are bundled with and host a test directory: `public`
+Docker images are bundled with and host a test directory: `foo`
 
 ### Unit Tests
 
