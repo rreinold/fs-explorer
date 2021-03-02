@@ -35,7 +35,7 @@ $ ./run.sh
  ### 2.Run in Docker, from Docker Hub (Recommended)
 
 ```
-docker run -p 8080:8080 rreinold/fs-explorer:0.1.0
+docker run -p 8080:8080 rreinold/fs-explorer:0.2.0
 ```
 
 ### 2. Run on Bare Metal
