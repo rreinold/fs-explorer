@@ -1,5 +1,8 @@
-FROM alpine:latest
-COPY fs-explorer /bin/fs-explorer
-COPY ./foo /foo
-WORKDIR /foo
-CMD ["/bin/fs-explorer"]
+FROM golang:1.16.0-alpine3.13
+ENV CGO_ENABLED 0
+WORKDIR /go/src/app
+COPY . .
+RUN go get -d -v ./...
+RUN go install -v ./...
+RUN go test ./...
+CMD ["fs-explorer"]
