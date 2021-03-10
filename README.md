@@ -27,10 +27,12 @@ Usage of fs-explorer:
     	Directory to host (Default: "." )
 ```
 
+
+
  ### 1. Run in Docker, from Docker Hub (Recommended)
 
 ```
-docker run -p 8080:8080 rreinold/fs-explorer:0.2.0
+docker run -p 8080:8080 -v <HOST_DIR>:/foo rreinold/fs-explorer:0.2.0
 ```
 
 ### 2. Run on Bare Metal
@@ -40,14 +42,14 @@ go run fs-explorer.go -d foo
 
 ### 3. Run in Docker, from image
 ```
-GOOS=linux go build fs-explorer.go
 docker build -t fs-explorer:dev .
-docker run -p 8080:8080 fs-explorer:dev
+docker run -p 8080:8080 -v <HOST_DIR>:/foo fs-explorer:dev
 ```
 
 ### 4. From script
 ```
-./run.sh
+# Build, Test, and Run using parameterized host directory /tmp
+./run.sh /tmp
 ```
 
 ## API
